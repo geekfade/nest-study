@@ -23,7 +23,7 @@ export class BaseExceptionFilter implements ExceptionFilter {
     const response = host.switchToHttp().getResponse<Response>();
 
     // 设置响应状态码为服务不可用，并发送响应信息
-    response.status(HttpStatus.SERVICE_UNAVAILABLE).send({
+    response.status(HttpStatus.SERVICE_UNAVAILABLE).end({
       statusCode: HttpStatus.SERVICE_UNAVAILABLE,
       timestamp: new Date().toISOString(),
       path: request.url,
