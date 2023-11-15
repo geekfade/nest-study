@@ -3,29 +3,30 @@ import {
   Module,
   ValidationPipe,
 } from '@nestjs/common';
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { addTransactionalDataSource } from 'typeorm-transactional';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+// import { UserModule } from './user/user.module';
 import { EmployeeModule } from './employee/employee.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { BaseExceptionFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 import { getConfig } from './common/utils/ymlConfig';
 import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 
 @Module({
   imports: [
+    // 配置
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvFile: true,
       load: [getConfig],
     }),
+    // 数据库
     TypeOrmModule.forRootAsync({
       useFactory() {
         return {
@@ -40,13 +41,12 @@ import { AuthModule } from './auth/auth.module';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
-    UserModule,
+    // UserModule,
     EmployeeModule,
     AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     // 在依赖注入容器中提供APP_PIPE，并使用工厂方法创建ValidationPipe实例
     {
       provide: APP_PIPE,
@@ -55,6 +55,10 @@ import { AuthModule } from './auth/auth.module';
           transform: true,
         });
       },
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
 
     // 在依赖注入容器中提供APP_INTERCEPTOR，并使用ClassSerializerInterceptor类进行实例化

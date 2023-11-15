@@ -2,6 +2,12 @@ HTTP:
   host: 'localhost'
   port: 3000
 
+# jwt
+JWT:
+  secret: secretKey
+  signOptions:
+    expiresIn: 60s
+
 # mysql
 MYSQL_CONFIG:
   type: mysql # 数据库链接类型

@@ -1,6 +1,6 @@
 import { Controller, Get, Version } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CustomException } from './common/exceptions/custom.business';
+import { CustomException } from './common/exceptions/custom.exception';
 import { ConfigService } from '@nestjs/config';
 
 @Controller()

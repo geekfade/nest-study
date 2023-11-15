@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { CustomException, TBusinessError } from './custom.business';
+import { CustomException, TBusinessError } from './custom.exception';
 
 /**
  * 异常过滤器，用于捕获Http异常

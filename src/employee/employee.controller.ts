@@ -1,17 +1,28 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import * as md5 from 'md5';
 import { EmployeeService } from './employee.service';
+import { AuthService } from '../auth/auth.service';
+import { LocalAuthGuard } from '../auth/guard/local-auth.guard';
 import { Employee } from './entities/employee.entity';
-import { CustomException } from '../common/exceptions/custom.business';
+import { CustomException } from '../common/exceptions/custom.exception';
+import { isPublic } from 'src/auth/constants';
+import { TIdAndUsername } from '../types/index';
+import { User } from '../common/decorators/user.decorator';
 
+@ApiTags('员工模块')
 @Controller('employee')
 export class EmployeeController {
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor(
+    private readonly employeeService: EmployeeService,
+    private readonly authService: AuthService,
+  ) {}
 
   @ApiOperation({
     summary: '员工登陆',
   })
+  @isPublic()
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Body() employee: Employee) {
     const { username, password } = employee;
@@ -35,6 +46,15 @@ export class EmployeeController {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _password, ...rest } = _employee;
-    return rest;
+    const tokenObj = await this.authService.login(_employee);
+    return { ...rest, ...tokenObj };
+  }
+
+  @ApiOperation({
+    summary: '测试接口认证',
+  })
+  @Get('/test')
+  test(@User() user: Pick<Employee, TIdAndUsername>) {
+    return user;
   }
 }
