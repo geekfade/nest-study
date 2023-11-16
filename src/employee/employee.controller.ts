@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import * as md5 from 'md5';
 import { EmployeeService } from './employee.service';
@@ -56,5 +56,17 @@ export class EmployeeController {
   @Get('/test')
   test(@User() user: Pick<Employee, TIdAndUsername>) {
     return user;
+  }
+
+  @ApiOperation({
+    summary: '分页',
+  })
+  @Get('page')
+  page(
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
+    @Query('name') name?: string,
+  ) {
+    return this.employeeService.page(page, pageSize, name);
   }
 }

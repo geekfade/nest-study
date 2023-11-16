@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport'; // 导入PassportStrategy�
 import { Strategy } from 'passport-local'; // 导入Strategy类
 import { AuthService } from '../auth.service'; // 导入AuthService类
 import { Employee } from '../../employee/entities/employee.entity'; // 导入Employee类
-import { CustomException } from '../../common/exceptions/custom.exception'; // 导入CustomException类
+import { CustomException } from 'src/common/exceptions/custom.exception'; // 导入CustomException类
 
 @Injectable() // 注入服务
 export class LocalStrategy extends PassportStrategy(Strategy) {

@@ -8,7 +8,6 @@ export const User = createParamDecorator<
   TIdAndUsername,
   ExecutionContext,
   | Pick<Employee, TIdAndUsername>
-  | Pick<Employee, TIdAndUsername>
   | Pick<Employee, TIdAndUsername>[TIdAndUsername]
 >((data, ctx) => {
   // 获取当前请求的用户信息

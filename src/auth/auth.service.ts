@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as md5 from 'md5';
 import { EmployeeService } from '../employee/employee.service';
 import { Employee } from '../employee/entities/employee.entity';
+import { TIdAndUsername } from '../types/index';
 
 @Injectable()
 /**
@@ -26,7 +28,7 @@ export class AuthService {
     // 根据用户名查找员工
     const employee = await this.employeeService.findByUsername(username);
     // 判断密码是否正确
-    if (employee?.password === pass) {
+    if (employee?.password === md5(pass)) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...reset } = employee;
       return reset;
@@ -36,12 +38,9 @@ export class AuthService {
 
   /**
    * 用户登录
-   *
    * @param {Employee} employee - 用户员工对象
-   * @returns {Object} - 返回包含token的对象
-   *  - token {string} - JWT令牌
    */
-  async login(employee: Employee): Promise<object> {
+  async login(employee: Pick<Employee, TIdAndUsername>) {
     const payload = { username: employee.username, id: employee.id };
     return {
       token: this.jwtService.sign(payload),

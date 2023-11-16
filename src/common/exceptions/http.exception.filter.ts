@@ -34,6 +34,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         message,
         success: false,
       });
+      return; // 结束异常捕获
     }
     // 返回响应状态码为404，响应信息为异常响应信息
     response.status(HttpStatus.NOT_FOUND).send({

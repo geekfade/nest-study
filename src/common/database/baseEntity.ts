@@ -68,7 +68,7 @@ export class BaseEntity {
   @Column({
     comment: '创建人',
   })
-  createUser: Date;
+  createUser: string;
 
   /**
    * 更新人

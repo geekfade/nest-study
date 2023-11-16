@@ -1,7 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/common/database/baseEntity';
 import { Column, Entity } from 'typeorm';
-@Entity()
+@Entity({
+  orderBy: {
+    updateTime: 'DESC',
+  },
+})
 export class Employee extends BaseEntity {
   @ApiProperty({
     description: '用户姓名',
