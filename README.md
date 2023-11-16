@@ -28,6 +28,33 @@
 
 ## Installation
 
+### config目录下初始化.dev.yml文件
+```
+HTTP:
+  host: 'localhost'
+  port: 3000
+
+# jwt
+JWT:
+  secret: secretKey
+  signOptions:
+    expiresIn: 60s
+
+# mysql
+MYSQL_CONFIG:
+  type: mysql # 数据库链接类型
+  host: localhost
+  port: 3306
+  username: 'root' # 数据库链接用户名
+  password: 'geeking' # 数据库链接密码
+  database: 'nest-study' # 数据库名
+  logging: true # 数据库打印日志
+  synchronize: false # 是否开启同步数据表功能 , 生产环境一定要关闭，开启会删除所有数据
+  autoLoadEntities: true # 是否自动加载实体
+
+```
+
+
 ```bash
 $ pnpm install
 ```

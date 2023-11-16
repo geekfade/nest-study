@@ -9,7 +9,7 @@ const getEnv = () => process.env.RUNNING_ENV;
 export const getConfig = (key?: string) => {
   // 读取配置文件并解析为对象
   const ymlInfo = yaml.load(
-    readFileSync(join(process.cwd(), `.config/.${getEnv()}.yml`), 'utf-8'),
+    readFileSync(join(process.cwd(), `config/.${getEnv()}.yml`), 'utf-8'),
   ) as Record<string, any>;
 
   // 如果指定了key，则返回指定的配置项
