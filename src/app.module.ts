@@ -17,6 +17,7 @@ import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 import { getConfig } from './common/utils/ymlConfig';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
+import { BaseModule } from './base/base.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
     // UserModule,
     EmployeeModule,
     AuthModule,
+    BaseModule,
   ],
   controllers: [],
   providers: [
