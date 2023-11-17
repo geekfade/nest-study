@@ -9,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { addTransactionalDataSource } from 'typeorm-transactional';
-// import { UserModule } from './user/user.module';
+import { UserModule } from './user/user.module';
 import { EmployeeModule } from './employee/employee.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { BaseExceptionFilter } from './common/exceptions/base.exception.filter';
@@ -18,6 +18,8 @@ import { getConfig } from './common/utils/ymlConfig';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { BaseModule } from './base/base.module';
+import { OrganizationModule } from './organization/organization.module';
+import { DepartmentModule } from './department/department.module';
 
 @Module({
   imports: [
@@ -42,10 +44,12 @@ import { BaseModule } from './base/base.module';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
-    // UserModule,
+    UserModule,
     EmployeeModule,
     AuthModule,
     BaseModule,
+    OrganizationModule,
+    DepartmentModule,
   ],
   controllers: [],
   providers: [

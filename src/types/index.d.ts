@@ -20,3 +20,12 @@ declare module 'express' {
     user: Pick<Employee, TIdAndUsername>;
   }
 }
+
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      RUNNING: string;
+      id: Employee['id'];
+    }
+  }
+}

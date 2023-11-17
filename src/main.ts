@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { generateDocument } from './doc';
 import { getConfig } from './common/utils/ymlConfig';
 import { logger } from './common/middleware/logger.middleware';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 declare const module: any;
 
@@ -12,13 +13,17 @@ async function bootstrap() {
   // 初始化事务上下文
   initializeTransactionalContext();
   // 创建应用实例
-  const app = await NestFactory.create(AppModule);
+  const app: NestExpressApplication = await NestFactory.create(AppModule);
   // 启用版本控制
   app.enableVersioning({
     // 版本控制类型
     type: VersioningType.URI,
     // 默认版本
     defaultVersion: ['1'],
+  });
+
+  app.useStaticAssets('public', {
+    prefix: '/public',
   });
 
   app.use(logger);

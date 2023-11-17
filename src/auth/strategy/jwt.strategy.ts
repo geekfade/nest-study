@@ -28,6 +28,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(
     payload: Pick<Employee, TIdAndUsername> & { iat: number; exp: number },
   ) {
+    if (!process.env.id) {
+      process.env.id = payload.id;
+    }
     return {
       id: payload.id,
       username: payload.username,

@@ -45,9 +45,9 @@ export function logger(req: Request, res: Response, next: () => any) {
   Method: ${req.method}
   IP: ${req.ip}
   Status code: ${code}
-  Parameters: ${JSON.stringify(req.params, null, 4)}
-  Query: ${JSON.stringify(req.query, null, 4)}
-  Body: ${JSON.stringify(req.body, null, 4)}
+  Parameters: ${JSON.stringify(req.params, null, 2)}
+  Query: ${JSON.stringify(req.query, null, 2)}
+  Body: ${JSON.stringify(req.body, null, 2)}
   `;
   // 根据状态码，进行日志类型区分
   if (code >= 500) {

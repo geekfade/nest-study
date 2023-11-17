@@ -1,6 +1,17 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import * as md5 from 'md5';
+import { Response } from 'express';
 import { EmployeeService } from './employee.service';
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guard/local-auth.guard';
@@ -9,6 +20,7 @@ import { CustomException } from '../common/exceptions/custom.exception';
 import { isPublic } from 'src/auth/constants';
 import { TIdAndUsername } from '../types/index';
 import { User } from '../common/decorators/user.decorator';
+import { exportExcel } from 'src/common/utils/fileExport';
 
 @ApiTags('员工模块')
 @Controller('employee')
@@ -68,5 +80,52 @@ export class EmployeeController {
     @Query('name') name?: string,
   ) {
     return this.employeeService.page(page, pageSize, name);
+  }
+
+  @ApiOperation({
+    summary: '创建员工',
+  })
+  @Post()
+  create(@Body() employee: Employee) {
+    employee.password = md5('123456');
+    return this.employeeService.create(employee);
+  }
+
+  @ApiOperation({
+    summary: '根据ID查询',
+  })
+  @Get('/:id')
+  findOne(@Param('id') id: string) {
+    return this.employeeService.findById(id);
+  }
+
+  @ApiOperation({
+    summary: '删除，支持批量删除',
+  })
+  @Delete()
+  del(@Query('ids') ids: string[]) {
+    return this.employeeService.delete(ids);
+  }
+
+  @ApiOperation({
+    summary: '启用，禁用，支持批量操作',
+  })
+  @Post('status/:status')
+  setStatus(@Param('status') status: number, @Query('ids') ids: string[]) {
+    return this.employeeService.setStatus(status, ids);
+  }
+
+  @ApiOperation({
+    summary: '导出',
+  })
+  @Get('export')
+  async exportXlsx(@Res() res: Response) {
+    const allData = await this.employeeService.findAll();
+    const buf = exportExcel(allData, '员工信息.xlsx');
+    res.set(
+      'Content-Disposition',
+      'attachment; filename=' + encodeURIComponent('员工信息.xlsx') + '',
+    );
+    res.send(buf);
   }
 }
